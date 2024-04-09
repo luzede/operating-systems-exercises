@@ -1,6 +1,5 @@
-output.txt
+lab1/output.txt
 a.out
-child
-gates
-ask3
-test.c
+lab2/child
+lab2/gates
+lab3/test.c
