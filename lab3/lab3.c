@@ -113,7 +113,7 @@ int main(int argc, char const *argv[])
       if (pollfds[0].revents & POLLIN) {
         char input[100];
         // read(0, input, sizeof(input));
-        fgets(input, sizeof(input), stdin);
+        fgets(input, 100, stdin);
 
         // Searches the newline character '\n' in the 'input', if there is none, clear the buffer
         if (!strchr(input, '\n')) {
@@ -136,7 +136,7 @@ int main(int argc, char const *argv[])
 
             // We map the exit to the highest value of 'long' type
             ssize_t nbytes = write(to_child[i][1], &exit, sizeof(long));
-            printf("Bytes %ld sent to child %ld\n", nbytes, i+1);
+            // printf("Bytes %ld sent to child %ld\n", nbytes, i+1);
           }
 
           printf("Waiting for all children to terminate\n");
@@ -153,14 +153,14 @@ int main(int argc, char const *argv[])
             child_turn += 1;
 
             ssize_t nbytes = write(to_child[child_turn-1][1], &num_to_pass, sizeof(long));
-            printf("%ld bytes sent to child\n", nbytes);
+            // printf("%ld bytes sent to child\n", nbytes);
           }
           // random mode
           else {
             child_turn = rand() % n + 1;
 
             ssize_t nbytes = write(to_child[child_turn - 1][1], &num_to_pass, sizeof(long));
-            printf("%ld bytes sent to child\n", nbytes);
+            // printf("%ld bytes sent to child\n", nbytes);
           }
 
           printf("[Parent] Assigned %ld to child %ld\n", num_to_pass, child_turn);
@@ -175,11 +175,13 @@ int main(int argc, char const *argv[])
         if (pollfds[i].revents & POLLIN) {
           long in;
           ssize_t nbytes = read(to_parent[i-1][0], &in, sizeof(long));
-          printf("%ld bytes read in parent sent from child\n", nbytes);
+          // printf("%ld bytes read in parent sent from child\n", nbytes);
           printf("%ld returned to parent from child %ld\n", in, i);
         }
       }
     }
+
+    free(pollfds);
   }
   // Child code
   else {
@@ -193,7 +195,7 @@ int main(int argc, char const *argv[])
     while (1) {
       long in;
       ssize_t nbytes = read(to_child[child_num - 1][0], &in, sizeof(long));
-      printf("%ld bytes read in child\n", nbytes);
+      // printf("%ld bytes read in child\n", nbytes);
 
       if (in == LONG_MAX) break;
 
