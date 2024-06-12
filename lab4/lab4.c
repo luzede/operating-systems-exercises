@@ -111,9 +111,11 @@ int main(int argc, char const *argv[])
 
     printf("Official name is: %s\n", he->h_name);
     printf("IP addresses: ");
+    // type casting the address list that is in 'he'
     addr_list = (struct in_addr **)he->h_addr_list;
     for(i = 0; addr_list[i] != NULL; i++) {
         //Return the first one;
+        // 'inet_ntoa' transforms IPs from their binary form to a string in dotted-decimal notation
         printf("%s ", inet_ntoa(*addr_list[i]));
     }
 
@@ -166,13 +168,6 @@ int main(int argc, char const *argv[])
             exit(1);
         }
 
-        // We are not checking with FD_ISSET because there is only one file descriptor
-        // which is the 'stdin' file descriptor
-        // if (verify) {
-        //     verify = 0;
-        //     // Message to send to the server
-        //     continue;
-        // }
 
         // Check if there is an input on the standard input
         // FD_ISSET returns a non-zero value if the file descriptor is ready
@@ -181,11 +176,6 @@ int main(int argc, char const *argv[])
             fgets(usr_input, 100, stdin); // Third parameter is the standard input file descriptor
             printf("You entered: %s", usr_input);
 
-            // if (verify) {
-            //     verify = 0;
-
-            //     continue;
-            // }
 
             if (strcmp(usr_input, "help\n") == 0) {
                 if (debug) printf("[DEBUG] User entered 'help'\n");
